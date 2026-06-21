@@ -1,103 +1,342 @@
-# YieldIQ
+# YieldIQ – Fixed Income Analytics & Investor Intelligence Platform
 
-**YieldIQ** is a production-grade full-stack fintech analytics platform designed to process and analyze large-scale investment transactions (100,000+) across multiple fixed-income and alternative investment products.
+![YieldIQ Banner](https://img.shields.io/badge/FinTech-Analytics-blue)
+![FastAPI](https://img.shields.io/badge/FastAPI-Backend-green)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-Database-blue)
+![React](https://img.shields.io/badge/React-Frontend-61DAFB)
+![Python](https://img.shields.io/badge/Python-Data%20Processing-yellow)
 
-## Technology Stack
+## Overview
 
-- **Backend:** Python, FastAPI, SQLAlchemy, PostgreSQL
-- **Frontend:** React, TypeScript, Material UI, Recharts, React Query
-- **Data Processing:** Pandas, NumPy (ETL jobs)
-- **Deployment:** Docker, Docker Compose
+YieldIQ is a full-stack fintech analytics and investor intelligence platform designed to help investment firms monitor investor behavior, portfolio performance, revenue growth, product performance, and retention trends.
 
-## Features
-
-- **Executive Dashboard:** Real-time KPI metrics, AUM growth, and monthly revenue trends.
-- **Investor Management:** Full CRUD operations, segmentation (Platinum, Gold, Silver), and portfolio views.
-- **Transaction Engine:** Handling 100k+ records with server-side pagination, sorting, and filtering.
-- **Product Management:** Manage various asset classes (Bonds, FDs, Digital Gold, Invoice Discounting).
-- **Analytics Dashboards:** Portfolio Allocation, Revenue Analytics, Cohort Retention, and Product Performance.
-- **Reports Generation:** Downloadable CSV, Excel, and PDF reports.
-- **Role-Based Access Control:** Secure JWT authentication (Admin, Analyst, Viewer roles).
-
-## Folder Structure
-
-```
-YieldIQ/
-├── backend/
-│   ├── app/                 # FastAPI Application
-│   │   ├── api/v1/routes/   # REST API Endpoints
-│   │   ├── core/            # Config, Security, Logging
-│   │   ├── db/              # DB Session & Init
-│   │   ├── models/          # SQLAlchemy ORM Models
-│   │   ├── repositories/    # Data Access Layer
-│   │   ├── schemas/         # Pydantic Validation Models
-│   │   └── services/        # Business Logic Layer
-│   ├── etl/                 # Seed Data & Data Processing Scripts
-│   ├── sql/                 # Database initialization scripts
-│   ├── Dockerfile           # Backend Docker configuration
-│   └── requirements.txt     # Python dependencies
-├── frontend/
-│   ├── src/                 # React Application
-│   │   ├── api/             # Axios API Client
-│   │   ├── components/      # Reusable UI Components
-│   │   ├── pages/           # Dashboard Pages
-│   │   ├── store/           # Global State (AuthContext)
-│   │   ├── types/           # TypeScript Interfaces
-│   │   └── utils/           # Helper Functions
-│   ├── Dockerfile           # Frontend Docker configuration
-│   └── package.json         # Node dependencies
-├── docker-compose.yml       # Production/Local Orchestration
-└── .env.example             # Environment template
-```
-
-## Setup & Running Locally
-
-### Prerequisites
-- Docker and Docker Compose installed.
-- (Optional) Python 3.11+ and Node.js v18+ for local development without Docker.
-
-### Running with Docker Compose (Recommended)
-
-1. **Clone the repository:**
-   ```bash
-   git clone <repo-url>
-   cd YieldIQ
-   ```
-
-2. **Start the services:**
-   This will spin up PostgreSQL, the FastAPI Backend, and the React Frontend.
-   ```bash
-   docker-compose up -d
-   ```
-
-3. **Generate Seed Data (Run once):**
-   This script creates 20k investors, 15 products, and 100k+ transactions.
-   ```bash
-   docker-compose run --rm seed
-   ```
-
-4. **Access the application:**
-   - **Frontend UI:** [http://localhost:3000](http://localhost:3000)
-   - **Backend API Docs:** [http://localhost:8000/api/v1/docs](http://localhost:8000/api/v1/docs)
-
-### Default Test Accounts
-
-| Role | Email | Password |
-|---|---|---|
-| Admin | `admin@yieldiq.com` | `Admin@123` |
-| Analyst | `analyst@yieldiq.com` | `Analyst@123` |
-| Viewer | `viewer@yieldiq.com` | `Viewer@123` |
-
-## Advanced: ETL Pipeline
-
-The platform includes a Pandas-based ETL pipeline for generating static offline KPI reports suitable for tools like Power BI.
-To run the ETL pipeline locally (assuming backend env is set up):
-
-```bash
-cd backend
-python -m etl.etl_pipeline
-```
-This generates CSV files in `backend/etl/exports/`.
+The platform processes and analyzes over **100,000+ investment transactions** across multiple fixed-income and alternative investment products, enabling data-driven business decisions through real-time dashboards and advanced analytics.
 
 ---
-*Designed & Built for SDE-1 Fintech Requirements.*
+
+## Key Features
+
+### Investor Intelligence
+
+* Investor onboarding and management
+* Investor segmentation (Platinum, Gold, Silver, New Investors)
+* Investor growth tracking
+* Retention and churn analysis
+* Investor portfolio summaries
+
+### Portfolio Analytics
+
+* Portfolio performance monitoring
+* Asset allocation analysis
+* Product distribution tracking
+* ROI and investment trend analysis
+* Assets Under Management (AUM) insights
+
+### Revenue Analytics
+
+* Monthly and quarterly revenue tracking
+* Product-wise revenue analysis
+* Growth trend monitoring
+* Business KPI reporting
+
+### Product Intelligence
+
+* Product performance evaluation
+* Most popular investment products
+* Revenue contribution analysis
+* Investment distribution analysis
+
+### Cohort & Retention Analytics
+
+* Cohort analysis by signup month
+* Retention tracking
+* Investor lifecycle monitoring
+* Churn prediction support
+
+### Reporting & Automation
+
+* Automated analytics pipelines
+* Scheduled KPI generation
+* Downloadable reports (CSV, Excel, PDF)
+* Executive business reporting
+
+---
+
+## Supported Investment Products
+
+* Bonds
+* Fixed Deposits (FDs)
+* Invoice Discounting
+* Asset Leasing
+* Digital Gold
+* Alternative Investment Products
+
+---
+
+## System Architecture
+
+```text
+                    ┌─────────────────────┐
+                    │      Frontend       │
+                    │   React Dashboard   │
+                    └──────────┬──────────┘
+                               │
+                               ▼
+                    ┌─────────────────────┐
+                    │      FastAPI        │
+                    │    REST APIs        │
+                    └──────────┬──────────┘
+                               │
+              ┌────────────────┼────────────────┐
+              ▼                ▼                ▼
+      Analytics Engine    Business Logic    Auth Layer
+              │                │                │
+              └────────────────┼────────────────┘
+                               ▼
+                    ┌─────────────────────┐
+                    │    PostgreSQL DB    │
+                    └──────────┬──────────┘
+                               │
+                               ▼
+                    ┌─────────────────────┐
+                    │ Pandas + NumPy ETL  │
+                    └─────────────────────┘
+```
+
+---
+
+## Tech Stack
+
+### Backend
+
+* Python
+* FastAPI
+* SQLAlchemy
+* PostgreSQL
+* JWT Authentication
+
+### Frontend
+
+* React
+* TypeScript
+* Material UI
+* Axios
+
+### Analytics
+
+* Pandas
+* NumPy
+* Power BI Integration
+
+### DevOps
+
+* Docker
+* Docker Compose
+* GitHub Actions (Optional)
+
+---
+
+## Database Design
+
+### Core Entities
+
+#### Investors
+
+```sql
+investors
+---------
+investor_id
+full_name
+email
+phone
+risk_profile
+registration_date
+```
+
+#### Products
+
+```sql
+products
+--------
+product_id
+product_name
+category
+risk_level
+expected_return
+```
+
+#### Transactions
+
+```sql
+transactions
+------------
+transaction_id
+investor_id
+product_id
+investment_amount
+investment_date
+maturity_date
+actual_return
+```
+
+#### Revenue
+
+```sql
+revenue
+-------
+revenue_id
+transaction_id
+platform_fee
+brokerage_fee
+net_revenue
+```
+
+---
+
+## Scalability Considerations
+
+The platform is designed to efficiently handle:
+
+* 100,000+ investment transactions
+* Large investor datasets
+* High-volume analytical queries
+* Aggregation-heavy reporting workloads
+
+Implemented optimizations include:
+
+* Database indexing
+* Query optimization
+* Pagination
+* Server-side filtering
+* Optimized joins
+* Batch analytics processing
+
+---
+
+## API Modules
+
+### Investor APIs
+
+```http
+GET    /api/investors
+POST   /api/investors
+PUT    /api/investors/{id}
+DELETE /api/investors/{id}
+```
+
+### Product APIs
+
+```http
+GET    /api/products
+POST   /api/products
+```
+
+### Transaction APIs
+
+```http
+GET    /api/transactions
+POST   /api/transactions
+```
+
+### Analytics APIs
+
+```http
+GET /api/analytics/revenue
+GET /api/analytics/portfolio
+GET /api/analytics/retention
+GET /api/analytics/cohorts
+```
+
+---
+
+## Sample Analytics
+
+### Investor Segmentation
+
+| Segment      | Criteria    |
+| ------------ | ----------- |
+| Platinum     | > ₹10 Lakhs |
+| Gold         | ₹5–10 Lakhs |
+| Silver       | ₹1–5 Lakhs  |
+| New Investor | < ₹1 Lakh   |
+
+---
+
+### Business KPIs
+
+* Total Investors
+* Active Investors
+* Monthly Revenue
+* AUM
+* Retention Rate
+* Churn Rate
+* Portfolio Growth
+* Product Performance
+
+---
+
+## Security Features
+
+* JWT Authentication
+* Password Hashing
+* Role-Based Access Control (RBAC)
+* Admin Access
+* Analyst Access
+* Read-Only Access
+* Input Validation
+* Secure API Endpoints
+
+---
+
+## Performance Metrics
+
+* Processes 100,000+ investment transactions
+* Optimized PostgreSQL indexing strategy
+* FastAPI asynchronous endpoints
+* Automated reporting pipelines
+* Real-time dashboard support
+
+---
+
+## Future Enhancements
+
+* Redis Caching
+* Background Job Processing (Celery)
+* Investor Risk Prediction
+* AI-Based Portfolio Recommendations
+* Fraud Detection Engine
+* Real-Time Streaming Analytics
+* Multi-Tenant Architecture
+* Kubernetes Deployment
+
+---
+
+## Project Highlights
+
+* Built a full-stack fintech analytics platform
+* Processed and analyzed 100,000+ investment transactions
+* Developed scalable REST APIs using FastAPI
+* Designed normalized PostgreSQL database schemas
+* Implemented investor segmentation and retention analytics
+* Built executive dashboards for business intelligence
+* Automated reporting workflows using Python and Pandas
+* Delivered scalable analytics architecture suitable for enterprise fintech environments
+
+---
+
+## Author
+
+**Rajath U**
+
+B.Tech Computer Science (AI & ML)
+Dayananda Sagar University
+
+GitHub: https://github.com/Rajathshivraj
+
+LinkedIn: Add your LinkedIn profile URL
+
+Portfolio: Add your portfolio URL
+
+---
+
+⭐ If you found this project useful, consider starring the repository.
